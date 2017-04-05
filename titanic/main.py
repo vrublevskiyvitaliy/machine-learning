@@ -148,6 +148,13 @@ def test():
                   acc_sgd, acc_linear_svc, acc_decision_tree]})
     print(models.sort_values(by='Score', ascending=False))
 
+    submission = pd.DataFrame({
+        "PassengerId": test_df["PassengerId"],
+        "Survived": Y_random_forest
+    })
+
+    submission.to_csv('output/submission_random_forest.csv', index=False)
+
 
 feature_extracting()
 test()
