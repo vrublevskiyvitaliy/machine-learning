@@ -7,11 +7,21 @@ from sklearn.linear_model import Perceptron
 from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 
+import pandas as pd
+
 
 def logistic_regression(X_train, Y_train, X_test, Y_test):
     logreg = LogisticRegression()
     logreg.fit(X_train, Y_train)
     acc_log = round(logreg.score(X_test, Y_test) * 100, 2)
+
+    # coeff_df = pd.DataFrame(X_train.columns.delete(0))
+    # coeff_df.columns = ['Feature']
+    # coeff_df["Correlation"] = pd.Series(logreg.coef_[0])
+    #
+    # print coeff_df.sort_values(by='Correlation', ascending=False)
+    # print '*' * 20
+
     return acc_log
 
 

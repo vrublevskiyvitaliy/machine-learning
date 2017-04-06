@@ -20,6 +20,7 @@ def feature_extracting():
     global combine
 
     work_on_title(combine)
+    work_on_cabine(combine)
 
     sex_to_int(combine)
     fill_missed_age(combine)
@@ -89,6 +90,17 @@ def make_submission():
 
 
 feature_extracting()
-#test()
-#make_submission()
-block_testing.testing_on_train_set(combine[0])
+
+
+#print(train_df.head(10))
+#print train_df.describe(include=['O'])
+#print train_df[['CabineChar', 'Survived']].groupby(['CabineChar'], as_index=False).mean().sort_values(by='Survived', ascending=False)
+#print train_df[['CabineD', 'Survived']].groupby(['CabineD'], as_index=False).mean().sort_values(by='Survived', ascending=False)
+#print train_df[['CabineE', 'Survived']].groupby(['CabineE'], as_index=False).mean().sort_values(by='Survived', ascending=False)
+#print train_df[['CabineB', 'Survived']].groupby(['CabineB'], as_index=False).mean().sort_values(by='Survived', ascending=False)
+#print train_df[['CabineT', 'Survived']].groupby(['CabineT'], as_index=False).mean().sort_values(by='Survived', ascending=False)
+
+
+test()
+make_submission()
+#block_testing.testing_on_train_set(combine[0])

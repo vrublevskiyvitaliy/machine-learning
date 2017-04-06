@@ -1,6 +1,17 @@
 import numpy as np
 
 
+def work_on_cabine(combine):
+    for dataset in combine:
+        dataset['CabineChar'] = dataset.Cabin.str.extract('([A-Za-z])', expand=False)
+
+    cabineChars = ['D', 'E', 'B']#, 'F', 'C', 'G', 'A', 'T']
+    for char in cabineChars:
+        for dataset in combine:
+            dataset['Cabine' + char] = 0
+            dataset.loc[dataset['CabineChar'] == char, 'Cabine' + char] = 1
+
+
 def work_on_title(combine):
     for dataset in combine:
         dataset['Title'] = dataset.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
@@ -104,14 +115,20 @@ def drop_unused_columns(combine):
     combine[0] = combine[0].drop(['Ticket', 'Cabin'], axis=1)
     combine[1] = combine[1].drop(['Ticket', 'Cabin'], axis=1)
 
+    combine[0] = combine[0].drop(['CabineChar'], axis=1)
+    combine[1] = combine[1].drop(['CabineChar'], axis=1)
+
     combine[0] = combine[0].drop(['Title'], axis=1)
     combine[1] = combine[1].drop(['Title'], axis=1)
 
     combine[0] = combine[0].drop(['Name', 'PassengerId'], axis=1)
     combine[1] = combine[1].drop(['Name'], axis=1)
 
-    combine[0] = combine[0].drop(['Parch', 'SibSp'], axis=1)
-    combine[1] = combine[1].drop(['Parch', 'SibSp'], axis=1)
+    combine[0] = combine[0].drop(['Parch'], axis=1)
+    combine[1] = combine[1].drop(['Parch'], axis=1)
+
+    combine[0] = combine[0].drop(['SibSp'], axis=1)
+    combine[1] = combine[1].drop(['SibSp'], axis=1)
 
     #combine[0] = combine[0].drop(['FamilySize'], axis=1)
     #combine[1] = combine[1].drop(['FamilySize'], axis=1)

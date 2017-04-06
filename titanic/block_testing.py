@@ -99,9 +99,9 @@ def testing_on_train_set(all_data):
         Y_test = all_test["Survived"]
 
         results = test_using_data(X_train, Y_train, X_test, Y_test)
-        print(results.sort_values(by='Score', ascending=False))
+        #print(results.sort_values(by='Score', ascending=False))
         all_results.append(results)
-        print ('*'*20)
+        #print ('*'*20)
 
     all_results_combined = all_results[0].copy()
     all_results_combined['TotalScore'] = all_results_combined['Score']
