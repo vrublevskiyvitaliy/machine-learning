@@ -7,12 +7,14 @@ import random as rnd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from common.models import *
+import common.models as model
 from features import *
+import block_testing
 
 train_df = pd.read_csv('input/train.csv')
 test_df = pd.read_csv('input/test.csv')
 combine = [train_df, test_df]
+
 
 def feature_extracting():
     global combine
@@ -41,22 +43,22 @@ def test():
     X_test = test_df.drop("PassengerId", axis=1).copy()
 
     # Logistic Regression
-    acc_log, Y_log = logistic_regression(X_train, Y_train, X_test)
+    acc_log, Y_log = model.logistic_regression(X_train, Y_train, X_test)
     # Support Vector Machines
-    acc_svc, Y_svc = support_vector_machines(X_train, Y_train, X_test)
-    acc_knn, Y_knn = KNeighbors(X_train, Y_train, X_test)
+    acc_svc, Y_svc = model.support_vector_machines(X_train, Y_train, X_test)
+    acc_knn, Y_knn = model.KNeighbors(X_train, Y_train, X_test)
     # Gaussian Naive Bayes
-    acc_gaussian, Y_gaussian = gaussian_naive_bayes(X_train, Y_train, X_test)
+    acc_gaussian, Y_gaussian = model.gaussian_naive_bayes(X_train, Y_train, X_test)
     # Perceptron
-    acc_perceptron, Y_perceptron = perceptron(X_train, Y_train, X_test)
+    acc_perceptron, Y_perceptron = model.perceptron(X_train, Y_train, X_test)
     # Linear SVC
-    acc_linear_svc, Y_linear_svc = linear_svm(X_train, Y_train, X_test)
+    acc_linear_svc, Y_linear_svc = model.linear_svm(X_train, Y_train, X_test)
     # Stochastic Gradient Descent
-    acc_sgd, Y_sgd = stochastic_gradient_descent(X_train, Y_train, X_test)
+    acc_sgd, Y_sgd = model.stochastic_gradient_descent(X_train, Y_train, X_test)
     # Decision Tree
-    acc_decision_tree, Y_decision_tree = decision_tree(X_train, Y_train, X_test)
+    acc_decision_tree, Y_decision_tree = model.decision_tree(X_train, Y_train, X_test)
     # Random Forest
-    acc_random_forest, Y_random_forest = random_forest(X_train, Y_train, X_test)
+    acc_random_forest, Y_random_forest = model.random_forest(X_train, Y_train, X_test)
 
     models = pd.DataFrame({
         'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression',
@@ -68,13 +70,25 @@ def test():
                   acc_sgd, acc_linear_svc, acc_decision_tree]})
     print(models.sort_values(by='Score', ascending=False))
 
+
+def make_submission():
+    global combine
+    train_df = combine[0]
+    test_df = combine[1]
+    X_train = train_df.drop("Survived", axis=1)
+    Y_train = train_df["Survived"]
+    X_test = test_df.drop("PassengerId", axis=1).copy()
+    acc_svc, Y_svc = model.support_vector_machines(X_train, Y_train, X_test)
+
     submission = pd.DataFrame({
         "PassengerId": test_df["PassengerId"],
-        "Survived": Y_random_forest
+        "Survived": Y_svc
     })
 
-    submission.to_csv('output/submission_random_forest.csv', index=False)
+    submission.to_csv('output/submission.csv', index=False)
 
 
 feature_extracting()
 test()
+make_submission()
+#block_testing.testing_on_train_set(combine[0])
