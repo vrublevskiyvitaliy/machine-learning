@@ -101,6 +101,6 @@ feature_extracting()
 #print train_df[['CabineT', 'Survived']].groupby(['CabineT'], as_index=False).mean().sort_values(by='Survived', ascending=False)
 
 
-test()
-make_submission()
-#block_testing.testing_on_train_set(combine[0])
+#test()
+#make_submission()
+block_testing.testing_on_train_set(combine[0])

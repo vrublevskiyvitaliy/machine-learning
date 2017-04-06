@@ -10,71 +10,97 @@ from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 
 
-def logistic_regression(X_train, Y_train, X_test, Y_test):
-    logreg = LogisticRegression()
-    logreg.fit(X_train, Y_train)
-    acc_log = round(logreg.score(X_test, Y_test) * 100, 2)
+class TestingModels:
+    def __init__(self):
+        pass
 
-    # coeff_df = pd.DataFrame(X_train.columns.delete(0))
-    # coeff_df.columns = ['Feature']
-    # coeff_df["Correlation"] = pd.Series(logreg.coef_[0])
-    #
-    # print coeff_df.sort_values(by='Correlation', ascending=False)
-    # print '*' * 20
+    def run(self, X_train, Y_train, X_test, Y_test):
+        self.X_train = X_train
+        self.Y_train = Y_train
+        self.X_test = X_test
+        self.Y_test = Y_test
 
-    return acc_log
+        acc_log = self.logistic_regression_train()
+        acc_svc = self.support_vector_machines_train()
+        acc_knn = self.KNeighbors_train()
+        acc_gaussian = self.gaussian_naive_bayes_train()
+        acc_perceptron = self.perceptron_train()
+        acc_linear_svc = self.linear_svm()
+        acc_sgd = self.stochastic_gradient_descent_train()
+        acc_decision_tree = self.decision_tree_train()
+        acc_random_forest = self.random_forest_train()
 
+        results = [acc_svc, acc_knn, acc_log,
+                   acc_random_forest, acc_gaussian, acc_perceptron,
+                   acc_sgd, acc_linear_svc, acc_decision_tree]
 
-def support_vector_machines(X_train, Y_train, X_test, Y_test):
-    svc = SVC()
-    svc.fit(X_train, Y_train)
-    acc_svc = round(svc.score(X_test, Y_test) * 100, 2)
-    return acc_svc
+        modelNames = ['Support Vector Machines', 'KNN', 'Logistic Regression',
+                      'Random Forest', 'Naive Bayes', 'Perceptron',
+                      'Stochastic Gradient Decent', 'Linear SVC',
+                      'Decision Tree']
+        return {
+            'score': results,
+            'models': modelNames,
+        }
 
+    def logistic_regression_train(self):
+        self.logreg = LogisticRegression()
+        self.logreg.fit(self.X_train, self.Y_train)
+        acc_log = round(self.logreg.score(self.X_test, self.Y_test) * 100, 2)
 
-def KNeighbors(X_train, Y_train, X_test, Y_test):
-    knn = KNeighborsClassifier(n_neighbors=3)
-    knn.fit(X_train, Y_train)
-    acc_knn = round(knn.score(X_test, Y_test) * 100, 2)
-    return acc_knn
+        # coeff_df = pd.DataFrame(self.X_train.columns.delete(0))
+        # coeff_df.columns = ['Feature']
+        # coeff_df["Correlation"] = pd.Series(logreg.coef_[0])
+        #
+        # print coeff_df.sort_values(by='Correlation', ascending=False)
+        # print '*' * 20
 
+        return acc_log
 
-def gaussian_naive_bayes(X_train, Y_train, X_test, Y_test):
-    gaussian = GaussianNB()
-    gaussian.fit(X_train, Y_train)
-    acc_gaussian = round(gaussian.score(X_test, Y_test) * 100, 2)
-    return acc_gaussian
+    def support_vector_machines_train(self):
+        self.svc = SVC()
+        self.svc.fit(self.X_train, self.Y_train)
+        acc_svc = round(self.svc.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_svc
 
+    def KNeighbors_train(self):
+        self.knn = KNeighborsClassifier(n_neighbors=3)
+        self.knn.fit(self.X_train, self.Y_train)
+        acc_knn = round(self.knn.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_knn
 
-def perceptron(X_train, Y_train, X_test, Y_test):
-    perceptron = Perceptron()
-    perceptron.fit(X_train, Y_train)
-    acc_perceptron = round(perceptron.score(X_test, Y_test) * 100, 2)
-    return acc_perceptron
+    def gaussian_naive_bayes_train(self):
+        self.gaussian = GaussianNB()
+        self.gaussian.fit(self.X_train, self.Y_train)
+        acc_gaussian = round(self.gaussian.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_gaussian
 
-def linear_svm(X_train, Y_train, X_test, Y_test):
-    linear_svc = LinearSVC()
-    linear_svc.fit(X_train, Y_train)
-    acc_linear_svc = round(linear_svc.score(X_test, Y_test) * 100, 2)
-    return acc_linear_svc
+    def perceptron_train(self):
+        self.perceptron = Perceptron()
+        self.perceptron.fit(self.X_train, self.Y_train)
+        acc_perceptron = round(self.perceptron.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_perceptron
 
+    def linear_svm(self):
+        self.linear_svc = LinearSVC()
+        self.linear_svc.fit(self.X_train, self.Y_train)
+        acc_linear_svc = round(self.linear_svc.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_linear_svc
 
-def stochastic_gradient_descent(X_train, Y_train, X_test, Y_test):
-    sgd = SGDClassifier()
-    sgd.fit(X_train, Y_train)
-    acc_sgd = round(sgd.score(X_test, Y_test) * 100, 2)
-    return acc_sgd
+    def stochastic_gradient_descent_train(self):
+        self.sgd = SGDClassifier()
+        self.sgd.fit(self.X_train, self.Y_train)
+        acc_sgd = round(self.sgd.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_sgd
 
+    def decision_tree_train(self):
+        self.decision_tree = DecisionTreeClassifier()
+        self.decision_tree.fit(self.X_train, self.Y_train)
+        acc_decision_tree = round(self.decision_tree.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_decision_tree
 
-def decision_tree(X_train, Y_train, X_test, Y_test):
-    decision_tree = DecisionTreeClassifier()
-    decision_tree.fit(X_train, Y_train)
-    acc_decision_tree = round(decision_tree.score(X_test, Y_test) * 100, 2)
-    return acc_decision_tree
-
-
-def random_forest(X_train, Y_train, X_test, Y_test):
-    random_forest = RandomForestClassifier(n_estimators=100)
-    random_forest.fit(X_train, Y_train)
-    acc_random_forest = round(random_forest.score(X_test, Y_test) * 100, 2)
-    return acc_random_forest
+    def random_forest_train(self):
+        self.random_forest = RandomForestClassifier(n_estimators=100)
+        self.random_forest.fit(self.X_train, self.Y_train)
+        acc_random_forest = round(self.random_forest.score(self.X_test, self.Y_test) * 100, 2)
+        return acc_random_forest

@@ -9,32 +9,12 @@ from features import *
 
 def test_using_data(X_train, Y_train, X_test, Y_test):
     # Logistic Regression
-    acc_log = logistic_regression(X_train, Y_train, X_test, Y_test)
-    # Support Vector Machines
-    acc_svc = support_vector_machines(X_train, Y_train, X_test, Y_test)
-
-    acc_knn = KNeighbors(X_train, Y_train, X_test, Y_test)
-    # Gaussian Naive Bayes
-    acc_gaussian = gaussian_naive_bayes(X_train, Y_train, X_test, Y_test)
-    # Perceptron
-    acc_perceptron = perceptron(X_train, Y_train, X_test, Y_test)
-    # Linear SVC
-    acc_linear_svc = linear_svm(X_train, Y_train, X_test, Y_test)
-    # Stochastic Gradient Descent
-    acc_sgd = stochastic_gradient_descent(X_train, Y_train, X_test, Y_test)
-    # Decision Tree
-    acc_decision_tree = decision_tree(X_train, Y_train, X_test, Y_test)
-    # Random Forest
-    acc_random_forest = random_forest(X_train, Y_train, X_test, Y_test)
+    testModel = TestingModels()
+    result = testModel.run(X_train, Y_train, X_test, Y_test)
 
     models = pd.DataFrame({
-        'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression',
-                  'Random Forest', 'Naive Bayes', 'Perceptron',
-                  'Stochastic Gradient Decent', 'Linear SVC',
-                  'Decision Tree'],
-        'Score': [acc_svc, acc_knn, acc_log,
-                  acc_random_forest, acc_gaussian, acc_perceptron,
-                  acc_sgd, acc_linear_svc, acc_decision_tree]})
+        'Model': result['models'],
+        'Score': result['score']})
     return models
 
 
