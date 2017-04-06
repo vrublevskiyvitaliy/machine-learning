@@ -89,7 +89,7 @@ def testing_on_train_set(all_data):
     MAX_BLOCK_NUMBER = 5
     size = len(all_data)
     all_results = []
-    for i in range(5):
+    for i in range(MAX_BLOCK_NUMBER):
         all_test = get_test_block(size, i, MAX_BLOCK_NUMBER, all_data)
         all_train = get_train_block(size, i, MAX_BLOCK_NUMBER, all_data)
 
@@ -102,4 +102,13 @@ def testing_on_train_set(all_data):
         print(results.sort_values(by='Score', ascending=False))
         all_results.append(results)
         print ('*'*20)
+
+    all_results_combined = all_results[0].copy()
+    all_results_combined['TotalScore'] = all_results_combined['Score']
+    for i in range(1, MAX_BLOCK_NUMBER):
+        all_results_combined['TotalScore'] += all_results[i]['Score']
+    all_results_combined['TotalScore'] /= MAX_BLOCK_NUMBER
+    all_results_combined = all_results_combined.drop('Score', axis=1)
+
+    print(all_results_combined.sort_values(by='TotalScore', ascending=False))
 
