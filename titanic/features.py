@@ -6,14 +6,14 @@ def work_on_title(combine):
         dataset['Title'] = dataset.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
 
     for dataset in combine:
-        dataset['Title'] = dataset['Title'].replace(['Lady', 'Countess', 'Capt', 'Col',
-                                                     'Don', 'Dr', 'Major', 'Rev', 'Sir', 'Jonkheer', 'Dona'], 'Rare')
+        dataset['Title'] = dataset['Title'].replace(['Lady', 'Countess', 'Don', 'Dr', 'Rev', 'Sir', 'Jonkheer', 'Dona'], 'Rare')
+        dataset['Title'] = dataset['Title'].replace(['Capt', 'Col', 'Major'], 'Officer')
 
         dataset['Title'] = dataset['Title'].replace('Mlle', 'Miss')
         dataset['Title'] = dataset['Title'].replace('Ms', 'Miss')
         dataset['Title'] = dataset['Title'].replace('Mme', 'Mrs')
 
-    title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
+    title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5, "Officer": 6}
     for dataset in combine:
         dataset['Title'] = dataset['Title'].map(title_mapping)
         dataset['Title'] = dataset['Title'].fillna(0)
@@ -53,7 +53,9 @@ def age_to_categories(combine):
         dataset.loc[(dataset['Age'] > 16) & (dataset['Age'] <= 32), 'Age'] = 1
         dataset.loc[(dataset['Age'] > 32) & (dataset['Age'] <= 48), 'Age'] = 2
         dataset.loc[(dataset['Age'] > 48) & (dataset['Age'] <= 64), 'Age'] = 3
-        dataset.loc[dataset['Age'] > 64, 'Age']
+        dataset.loc[dataset['Age'] > 64, 'Age'] = 4
+        #dataset['Age'] = dataset['Age'].astype(int)
+    return combine
 
 
 def add_family_size(combine):
@@ -108,7 +110,10 @@ def drop_unused_columns(combine):
     combine[0] = combine[0].drop(['Name', 'PassengerId'], axis=1)
     combine[1] = combine[1].drop(['Name'], axis=1)
 
-    combine[0] = combine[0].drop(['Parch', 'SibSp', 'FamilySize'], axis=1)
-    combine[1] = combine[1].drop(['Parch', 'SibSp', 'FamilySize'], axis=1)
+    combine[0] = combine[0].drop(['Parch', 'SibSp'], axis=1)
+    combine[1] = combine[1].drop(['Parch', 'SibSp'], axis=1)
+
+    #combine[0] = combine[0].drop(['FamilySize'], axis=1)
+    #combine[1] = combine[1].drop(['FamilySize'], axis=1)
 
     return combine

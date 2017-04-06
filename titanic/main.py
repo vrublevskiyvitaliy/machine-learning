@@ -21,7 +21,7 @@ def feature_extracting():
 
     sex_to_int(combine)
     fill_missed_age(combine)
-    age_to_categories(combine)
+    combine = age_to_categories(combine)
     add_family_size(combine)
     add_is_alone(combine)
     add_age_class(combine)
