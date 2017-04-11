@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import random as rnd
+import time
 
 # visualization
 import seaborn as sns
@@ -85,8 +86,8 @@ def make_submission():
         "PassengerId": test_df["PassengerId"],
         "Survived": Y_svc
     })
-
-    submission.to_csv('output/submission.csv', index=False)
+    time_suffix = time.strftime("%H_%M_%S%d_%m_%Y")
+    submission.to_csv('output/submission_' + time_suffix + '.csv', index=False)
 
 
 feature_extracting()
@@ -102,5 +103,5 @@ feature_extracting()
 
 
 #test()
-#make_submission()
-block_testing.testing_on_train_set(combine[0])
+make_submission()
+#block_testing.testing_on_train_set(combine[0])
