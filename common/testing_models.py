@@ -29,15 +29,16 @@ class TestingModels:
         acc_sgd = self.stochastic_gradient_descent_train()
         acc_decision_tree = self.decision_tree_train()
         acc_random_forest = self.random_forest_train()
+        acc_second = self.second_level()
 
         results = [acc_svc, acc_knn, acc_log,
                    acc_random_forest, acc_gaussian, acc_perceptron,
-                   acc_sgd, acc_linear_svc, acc_decision_tree]
+                   acc_sgd, acc_linear_svc, acc_decision_tree, acc_second]
 
         modelNames = ['Support Vector Machines', 'KNN', 'Logistic Regression',
                       'Random Forest', 'Naive Bayes', 'Perceptron',
                       'Stochastic Gradient Decent', 'Linear SVC',
-                      'Decision Tree']
+                      'Decision Tree', '2 Level']
         return {
             'score': results,
             'models': modelNames,
@@ -104,3 +105,34 @@ class TestingModels:
         self.random_forest.fit(self.X_train, self.Y_train)
         acc_random_forest = round(self.random_forest.score(self.X_test, self.Y_test) * 100, 2)
         return acc_random_forest
+
+    def second_level(self):
+        self.second_level = SVC()
+        #self.second_level = RandomForestClassifier(n_estimators=100)
+
+        first_level_predictions = pd.DataFrame({
+            "svm": self.svc.predict(self.X_train),
+            #"logreg": self.logreg.predict(self.X_train),
+            "random_forest": self.random_forest.predict(self.X_train),
+            #"KNeighbors": self.knn.predict(self.X_train),
+            #"gaussian": self.gaussian.predict(self.X_train),
+            #"perceptron": self.perceptron.predict(self.X_train),
+            "linear_svc": self.linear_svc.predict(self.X_train),
+            "decision_tree": self.decision_tree.predict(self.X_train),
+        })
+
+        self.second_level.fit(first_level_predictions, self.Y_train)
+
+        first_level_test_predictions = pd.DataFrame({
+            "svm": self.svc.predict(self.X_test),
+            #"logreg": self.logreg.predict(self.X_test),
+            "random_forest": self.random_forest.predict(self.X_test),
+            #"KNeighbors": self.knn.predict(self.X_test),
+            #"gaussian": self.gaussian.predict(self.X_test),
+            #"perceptron": self.perceptron.predict(self.X_test),
+            "linear_svc": self.linear_svc.predict(self.X_test),
+            "decision_tree": self.decision_tree.predict(self.X_test),
+        })
+
+        acc = round(self.second_level.score(first_level_test_predictions, self.Y_test) * 100, 2)
+        return acc

@@ -103,5 +103,5 @@ feature_extracting()
 
 
 #test()
-make_submission()
-#block_testing.testing_on_train_set(combine[0])
+#make_submission()
+block_testing.testing_on_train_set(combine[0])
