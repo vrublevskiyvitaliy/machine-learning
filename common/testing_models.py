@@ -106,9 +106,23 @@ class TestingModels:
         acc_random_forest = round(self.random_forest.score(self.X_test, self.Y_test) * 100, 2)
         return acc_random_forest
 
+    def second_level_predict(self, X_test):
+        first_level_test_predictions = pd.DataFrame({
+            "svm": self.svc.predict(X_test),
+            #"logreg": self.logreg.predict(X_test),
+            "random_forest": self.random_forest.predict(X_test),
+            #"KNeighbors": self.knn.predict(X_test),
+            #"gaussian": self.gaussian.predict(X_test),
+            #"perceptron": self.perceptron.predict(X_test),
+            #"linear_svc": self.linear_svc.predict(X_test),
+            #"decision_tree": self.decision_tree.predict(X_test),
+        })
+
+        return self.second_level.predict(first_level_test_predictions)
+
     def second_level(self):
-        self.second_level = SVC()
-        #self.second_level = RandomForestClassifier(n_estimators=100)
+        #self.second_level = SVC()
+        self.second_level = RandomForestClassifier(n_estimators=100)
 
         first_level_predictions = pd.DataFrame({
             "svm": self.svc.predict(self.X_train),
@@ -117,8 +131,8 @@ class TestingModels:
             #"KNeighbors": self.knn.predict(self.X_train),
             #"gaussian": self.gaussian.predict(self.X_train),
             #"perceptron": self.perceptron.predict(self.X_train),
-            "linear_svc": self.linear_svc.predict(self.X_train),
-            "decision_tree": self.decision_tree.predict(self.X_train),
+            #"linear_svc": self.linear_svc.predict(self.X_train),
+            #"decision_tree": self.decision_tree.predict(self.X_train),
         })
 
         self.second_level.fit(first_level_predictions, self.Y_train)
@@ -130,8 +144,8 @@ class TestingModels:
             #"KNeighbors": self.knn.predict(self.X_test),
             #"gaussian": self.gaussian.predict(self.X_test),
             #"perceptron": self.perceptron.predict(self.X_test),
-            "linear_svc": self.linear_svc.predict(self.X_test),
-            "decision_tree": self.decision_tree.predict(self.X_test),
+            #"linear_svc": self.linear_svc.predict(self.X_test),
+            #"decision_tree": self.decision_tree.predict(self.X_test),
         })
 
         acc = round(self.second_level.score(first_level_test_predictions, self.Y_test) * 100, 2)

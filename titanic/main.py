@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 import common.models as model
 from features import *
+from common.testing_models import *
 import block_testing
 
 train_df = pd.read_csv('input/train.csv')
@@ -90,6 +91,27 @@ def make_submission():
     submission.to_csv('output/submission_' + time_suffix + '.csv', index=False)
 
 
+def make_submission_using_test_module():
+    global combine
+    train_df = combine[0]
+    test_df = combine[1]
+    X_train = train_df.drop("Survived", axis=1)
+    Y_train = train_df["Survived"]
+    X_test = test_df.drop("PassengerId", axis=1).copy()
+
+    testModel = TestingModels()
+    testModel.run(X_train, Y_train, X_train, Y_train)
+
+    Y_svc = testModel.second_level_predict(X_test)
+
+
+    submission = pd.DataFrame({
+        "PassengerId": test_df["PassengerId"],
+        "Survived": Y_svc
+    })
+    time_suffix = time.strftime("%H_%M_%S%d_%m_%Y")
+    submission.to_csv('output/submission_' + time_suffix + '.csv', index=False)
+
 feature_extracting()
 
 
@@ -104,4 +126,5 @@ feature_extracting()
 
 #test()
 #make_submission()
-block_testing.testing_on_train_set(combine[0])
+make_submission_using_test_module()
+#block_testing.testing_on_train_set(combine[0])
