@@ -73,7 +73,7 @@ def decision_tree(X_train, Y_train, X_test):
 
 
 def random_forest(X_train, Y_train, X_test):
-    random_forest = RandomForestClassifier(n_estimators=100)
+    random_forest = RandomForestClassifier(n_estimators=300)
     random_forest.fit(X_train, Y_train)
     Y_pred = random_forest.predict(X_test)
     random_forest.score(X_train, Y_train)

@@ -23,7 +23,7 @@ def feature_extracting():
 
     work_on_title(combine)
     work_on_cabine(combine)
-
+    add_name_size(combine)
     sex_to_int(combine)
     fill_missed_age(combine)
     combine = age_to_categories(combine)
@@ -81,7 +81,7 @@ def make_submission():
     X_train = train_df.drop("Survived", axis=1)
     Y_train = train_df["Survived"]
     X_test = test_df.drop("PassengerId", axis=1).copy()
-    acc_svc, Y_svc = model.support_vector_machines(X_train, Y_train, X_test)
+    acc_svc, Y_svc = model.random_forest(X_train, Y_train, X_test)
 
     submission = pd.DataFrame({
         "PassengerId": test_df["PassengerId"],
@@ -126,5 +126,5 @@ feature_extracting()
 
 #test()
 #make_submission()
-make_submission_using_test_module()
-#block_testing.testing_on_train_set(combine[0])
+#make_submission_using_test_module()
+block_testing.testing_on_train_set(combine[0])

@@ -69,6 +69,11 @@ def age_to_categories(combine):
     return combine
 
 
+def add_name_size(combine):
+    for dataset in combine:
+        dataset['NameSize'] = len(dataset['Name'])
+
+
 def add_family_size(combine):
     for dataset in combine:
         dataset['FamilySize'] = dataset['SibSp'] + dataset['Parch'] + 1
